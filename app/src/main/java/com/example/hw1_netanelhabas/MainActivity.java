@@ -96,8 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setHeartVisible() {
-        for (int i = 0; i < gameManager.getCurrentIndexCar(); i++) {
+       // for (int i = 0; i < gameManager.getCurrentIndexCar(); i++) {
+        for (int i = 0; i < game_IMG_hearts.length; i++) {
+
             game_IMG_hearts[i].setVisibility(View.VISIBLE);
+
         }
 
     }
@@ -188,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         if(gameManager.getWrong() == game_IMG_hearts.length) {
             gameOver();
             toast("Game Over restart the game.");
+            vibrate();
             return;
         }
 
