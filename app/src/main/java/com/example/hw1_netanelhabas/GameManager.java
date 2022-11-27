@@ -44,7 +44,6 @@ public class GameManager {
         int random = rand.nextInt(ROCKS_COL);//gives me a number for the first rock in col 0-ROCKS_COL
         return random;
     }
-
     }
 
 

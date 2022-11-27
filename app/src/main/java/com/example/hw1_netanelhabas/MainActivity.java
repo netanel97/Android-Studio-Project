@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
         gameManager = new GameManager(game_IMG_hearts.length);
         initViews();
         startGame();
+
+
+        game_BTN_arrows[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {clicked(-1);}
+        });
+        game_BTN_arrows[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {clicked(1);}
+        });
     }
 
 
@@ -142,14 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private void play() {
         checkCollsion();
         updateMatRock();
-        game_BTN_arrows[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {clicked(-1);}
-        });
-        game_BTN_arrows[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {clicked(1);}
-        });
+
     }
 
     private void randnewRock() {
