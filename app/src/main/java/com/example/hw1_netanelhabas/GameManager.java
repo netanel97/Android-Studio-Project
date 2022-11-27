@@ -21,14 +21,12 @@ public class GameManager {
     }
 
     public int moveIndexCar(int index) {
-        if (index == 1 && getCurrentIndexCar() < TOP_RIGHT) {//move right until index 2(top right)
+        if (index == 1 && getCurrentIndexCar() < TOP_RIGHT) //move right until index 2(top right)
             this.currentIndexCar+=1;
-            return getCurrentIndexCar();
-        }
-        else if(index == -1 && getCurrentIndexCar() > 0){
+
+        else if(index == -1 && getCurrentIndexCar() > 0)
             this.currentIndexCar-=1;
-            return getCurrentIndexCar();
-        }
+
         return getCurrentIndexCar();
         }
 
