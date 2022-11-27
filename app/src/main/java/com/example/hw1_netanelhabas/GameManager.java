@@ -7,7 +7,7 @@ public class GameManager {
     private int life; //not sure about this
     public static final int ROCK_ROWS = 4;
     public static final int ROCKS_COL = 3;
-    public final int TOP_RIGHT = ROCKS_COL - 1;
+    private final int TOP_RIGHT = ROCKS_COL - 1;
     Random rand = new Random();//rand for the rocks falling down
     private int currentIndexCar = 1;
     public GameManager() {
