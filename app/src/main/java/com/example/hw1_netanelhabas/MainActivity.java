@@ -29,17 +29,16 @@ public class MainActivity extends AppCompatActivity {
     GameManager gameManager;
     private Timer timer;
     private int time = 0;
-    private final int DELAY = 1000;
+    private final int DELAY = 600;
     private AppCompatImageView road_IMG_background;
-
-
+    String[] typeImage= new String[]{"ic_rock","gold"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        Glide.with(MainActivity.this).load(R.drawable.road).into(road_IMG_background);
+        Glide.with(MainActivity.this).load(R.drawable.goldminebackground).into(road_IMG_background);
         gameManager = new GameManager(game_IMG_hearts.length);
         initViews();
         startGame();
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     play();
                     if(time % 2 != 0) {//call every two sec and put it in the matrix
-                        randnewRock();
+                        randImage();
                     }
                     time++;
 
@@ -90,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setMotorbikesVisible() {
         for (int i = 0; i < game_IMG_motorbikes.length; i++) {
-            if(i !=1)
+            if(i != gameManager.getCurrentIndexCar())
                 game_IMG_motorbikes[i].setVisibility(View.INVISIBLE);//all the bikes except the middle
         }
-        game_IMG_motorbikes[1].setVisibility(View.VISIBLE);//middle bike visible
+        game_IMG_motorbikes[ gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);//middle bike visible
     }
 
     private void setRocksInvisible() {
@@ -125,20 +124,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void findRocks() {
         game_IMG_rocksMatrix = new ShapeableImageView[][]{
-                {findViewById(R.id.main_IMG_rock1),findViewById(R.id.main_IMG_rock2),findViewById(R.id.main_IMG_rock3)},
-                {findViewById(R.id.main_IMG_rock4),findViewById(R.id.main_IMG_rock5),findViewById(R.id.main_IMG_rock6)},
-                {findViewById(R.id.main_IMG_rock7),findViewById(R.id.main_IMG_rock8),findViewById(R.id.main_IMG_rock9)},
-                {findViewById(R.id.main_IMG_rock10),findViewById(R.id.main_IMG_rock11),findViewById(R.id.main_IMG_rock12)},
-        };
+                {findViewById(R.id.main_IMG_rock1),findViewById(R.id.main_IMG_rock2),findViewById(R.id.main_IMG_rock3),findViewById(R.id.main_IMG_rock4),findViewById(R.id.main_IMG_rock5)},
+                {findViewById(R.id.main_IMG_rock6),findViewById(R.id.main_IMG_rock7),findViewById(R.id.main_IMG_rock8),findViewById(R.id.main_IMG_rock9),findViewById(R.id.main_IMG_rock10)},
+                {findViewById(R.id.main_IMG_rock11),findViewById(R.id.main_IMG_rock12),findViewById(R.id.main_IMG_rock13),findViewById(R.id.main_IMG_rock14),findViewById(R.id.main_IMG_rock15)},
+                {findViewById(R.id.main_IMG_rock16),findViewById(R.id.main_IMG_rock17),findViewById(R.id.main_IMG_rock18),findViewById(R.id.main_IMG_rock19),findViewById(R.id.main_IMG_rock20)}
+        ,{findViewById(R.id.main_IMG_rock21),findViewById(R.id.main_IMG_rock22),findViewById(R.id.main_IMG_rock23),findViewById(R.id.main_IMG_rock24),findViewById(R.id.main_IMG_rock25)}};
 
     }
 
     private void findMotorbikes() {
 
         game_IMG_motorbikes = new ShapeableImageView[]{
-                findViewById(R.id.main_IMG_leftBike),
-                findViewById(R.id.main_IMG_middleBike),
-                findViewById(R.id.main_IMG_rightBike)};
+                findViewById(R.id.main_IMG_leftMiner),
+                findViewById(R.id.main_IMG_leftMidMiner),
+                findViewById(R.id.main_IMG_middleMiner),
+                findViewById(R.id.main_IMG_rightMidMiner),
+                findViewById(R.id.main_IMG_rightMiner)};
     }
 
 
@@ -155,20 +156,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void randnewRock() {
-        int col = gameManager.randomRockInCol();
+    private void randImage() {
+        int col = gameManager.randomViewImage();//0
+        int type = gameManager.randTypeImage();//1
+        setImage(0,col,type);
         game_IMG_rocksMatrix[0][col].setVisibility(View.VISIBLE);
+    }
+
+    private void setImage(int row,int col,int type){
+        int imageID = getResources().getIdentifier(typeImage[type], "drawable", getPackageName());
+        gameManager.setMainTypeMatrix(row,col,type);// 0 == rock 1 == coins
+        game_IMG_rocksMatrix[row][col].setImageResource(imageID);
+
     }
 
 
     private void updateMatRock() {
         for (int i = ROCK_ROWS - 1; i >= 0; i--) {
             for (int j = ROCKS_COL - 1; j >= 0; j--) {
-                if(game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && i == ROCK_ROWS-1)
+                if(game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && i == ROCK_ROWS-1) {//last row-->Invisible
                     game_IMG_rocksMatrix[i][j].setVisibility(View.INVISIBLE);
+
+                }
 
                 if(game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE){
                     game_IMG_rocksMatrix[i][j].setVisibility(View.INVISIBLE);
+                    int type = gameManager.getMain_type_matrix(i,j);//get the type,if type = 0-> rock 1->coin
+                    gameManager.setMainTypeMatrix(i,j,-1);
+                    setImage(i+1,j,type);
+                    gameManager.setMainTypeMatrix(i+1,j,type);// 0 == rock 1 == coins
                     game_IMG_rocksMatrix[i+1][j].setVisibility(View.VISIBLE);
                 }
             }
@@ -182,8 +198,12 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = ROCK_ROWS - 1; i > 0; i--) {
             for (int j = ROCKS_COL - 1; j >= 0; j--) {//need to check if its >=
-                if (i == ROCK_ROWS - 1 && game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && j == gameManager.getCurrentIndexCar()) {
+                if (i == ROCK_ROWS - 1 && game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && j == gameManager.getCurrentIndexCar() && gameManager.getMain_type_matrix(i,j) == 0) {
+                    //checking last row + if its rock visible
                     removeHealth();
+                }
+                else{
+                    //score ++
                 }
             }
         }
