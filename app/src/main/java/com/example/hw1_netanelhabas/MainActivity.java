@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void checkCollsion() {
 
         for (int i = ROCK_ROWS - 1; i > 0; i--) {
