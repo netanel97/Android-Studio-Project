@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class GameManager {
     private int wrong;
+    private int score = 0;
     private int life; //not sure about this
     public static final int ROCK_ROWS = 5;
     public static final int ROCKS_COL = 5;
@@ -31,8 +32,15 @@ public class GameManager {
         }
 
     }
+    public void addScore(){
+        score += rand.nextInt(50) + 10;
+    }
 
-    public void setMainTypeMatrix(int row,int col, int type) {// put the type of the coin
+    public int getScore() {
+        return score;
+    }
+
+    public void setMainTypeMatrix(int row, int col, int type) {// put the type of the coin
         main_type_matrix[row][col] = type;
     }
 

@@ -58,6 +58,22 @@
                         android:scaleType="fitCenter"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/main_TXT_Score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Score:"
+                    android:textStyle="bold"
+                    android:textSize="30sp"
+                    android:layout_marginTop="30dp"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/main_TXT_addScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="000"
+                    android:textStyle="bold"
+                    android:textSize="30sp"
+                    android:layout_marginTop="30dp"/>
 
             </LinearLayout>
         <LinearLayout

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ShapeableImageView[][] game_IMG_rocksMatrix;
     private ExtendedFloatingActionButton[] game_BTN_arrows;
     private ShapeableImageView[] game_IMG_motorbikes;
+    private MaterialTextView main_TXT_addScore;
     GameManager gameManager;
     private Timer timer;
     private int time = 0;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void findViews() {
         road_IMG_background = findViewById(R.id.road_IMG_background);
+        main_TXT_addScore = findViewById(R.id.main_TXT_addScore);
         findHearts();
         findRocks();
         findMotorbikes();
@@ -199,15 +202,24 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = ROCK_ROWS - 1; i > 0; i--) {
             for (int j = ROCKS_COL - 1; j >= 0; j--) {//need to check if its >=
-                if (i == ROCK_ROWS - 1 && game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && j == gameManager.getCurrentIndexCar() && gameManager.getMain_type_matrix(i,j) == 0) {
-                    //checking last row + if its rock visible
-                    removeHealth();
+                if (i == ROCK_ROWS - 1 && game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && j == gameManager.getCurrentIndexCar()) {
+                    //checking last row
+                    checkType(i,j,gameManager.getMain_type_matrix(i,j));//check the type
+
                 }
-                else{
-                    //score ++
-                }
+//
             }
         }
+    }
+
+    private void checkType(int row,int col,int type) {
+        if(type == 0)//0 -->Rock
+            removeHealth();
+        else{//Coin
+            gameManager.addScore();
+            main_TXT_addScore.setText(""+gameManager.getScore());
+        }
+
     }
 
     private void removeHealth() {
