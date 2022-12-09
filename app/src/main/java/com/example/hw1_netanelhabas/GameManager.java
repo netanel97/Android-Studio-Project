@@ -1,5 +1,6 @@
 package com.example.hw1_netanelhabas;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.Random;
@@ -14,12 +15,14 @@ public class GameManager {
     Random rand = new Random();//rand for the rocks falling down
     private int currentIndexCar = ROCKS_COL/2;
     private int[][] main_type_matrix;
+    private Context context;
 
     public GameManager() {
     }
 
-    public GameManager(int health) {
+    public GameManager(int health,Context context) {
         this.life = health;
+        this.context = context;
         initMatrixType();
     }
 

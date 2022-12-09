@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -34,17 +36,28 @@ public class MainActivity extends AppCompatActivity {
     private final int DELAY = 600;
     private AppCompatImageView road_IMG_background;
     String[] typeImage= new String[]{"ic_rock","gold"};
-
+    CoinSound coinSound;
+    RockSound rockSound;
+    SensorDetector sensorDetector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
         Glide.with(MainActivity.this).load(R.drawable.goldminebackground).into(road_IMG_background);
-        gameManager = new GameManager(game_IMG_hearts.length);
+        gameManager = new GameManager(game_IMG_hearts.length,this);
+        sensorDetector = new SensorDetector(this,gameManager,callBack_steps);
         initViews();
+        setButton();
         startGame();
 
+
+        private SensorDetector.CallBack_MinerView callBack_steps = new SensorDetector.CallBack_MinerView() {
+            @Override
+            public void hideMinerView(){
+
+            }
+        };
 
         game_BTN_arrows[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setButton() {
+
+        game_BTN_arrows[0].hide();
+        game_BTN_arrows[1].hide();
+        sensorDetector.start();
+
+    }
+
 
     private void findViews() {
         road_IMG_background = findViewById(R.id.road_IMG_background);
@@ -64,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         findRocks();
         findMotorbikes();
         findArrows();
+        game_BTN_arrows[0].hide();
+        game_BTN_arrows[1].hide();
     }
 
 
@@ -207,19 +230,40 @@ public class MainActivity extends AppCompatActivity {
                     checkType(i,j,gameManager.getMain_type_matrix(i,j));//check the type
 
                 }
-//
+
             }
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //coinSound = new CoinSound(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        coinSound.cancel(true);
+    }
+
+
+
     private void checkType(int row,int col,int type) {
-        if(type == 0)//0 -->Rock
+
+        if(type == 0) {//0 -->Rock
             removeHealth();
+            rockSound = new RockSound(this);
+            rockSound.execute();
+
+        }
         else{//Coin
             gameManager.addScore();
             main_TXT_addScore.setText(""+gameManager.getScore());
+            coinSound = new CoinSound(this);
+            coinSound.execute();
         }
-
+        vibrate();
     }
 
     private void removeHealth() {
@@ -271,6 +315,8 @@ public class MainActivity extends AppCompatActivity {
         game_IMG_motorbikes[currentIndex].setVisibility(View.INVISIBLE);
         game_IMG_motorbikes[moveLeftRight].setVisibility(View.VISIBLE);
     }
+
+
 }
 
 
