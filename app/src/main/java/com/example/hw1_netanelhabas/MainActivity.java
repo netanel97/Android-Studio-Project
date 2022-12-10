@@ -46,18 +46,10 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         Glide.with(MainActivity.this).load(R.drawable.goldminebackground).into(road_IMG_background);
         gameManager = new GameManager(game_IMG_hearts.length,this);
-        sensorDetector = new SensorDetector(this,gameManager,callBack_steps);
+        sensorDetector = new SensorDetector(this,callBack_steps,gameManager);
         initViews();
         setButton();
         startGame();
-
-
-        private SensorDetector.CallBack_MinerView callBack_steps = new SensorDetector.CallBack_MinerView() {
-            @Override
-            public void hideMinerView(){
-
-            }
-        };
 
         game_BTN_arrows[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +61,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setButton() {
+    private SensorDetector.CallBack_MinerView callBack_steps = new SensorDetector.CallBack_MinerView() {
+        @Override
+        public void moveMinerBySensor(int index){
+            game_IMG_motorbikes[gameManager.getCurrentIndexCar()].setVisibility(View.INVISIBLE);
+            gameManager.moveIndexCar(index);
+            game_IMG_motorbikes[gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);
+        }
+    };
 
+    private void setButton() {
+        // TODO: 12/10/2022 need boolean from menu that check if the sensor is on and do 75-77 lines 
         game_BTN_arrows[0].hide();
         game_BTN_arrows[1].hide();
         sensorDetector.start();
@@ -239,12 +240,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //coinSound = new CoinSound(this);
+        sensorDetector.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         coinSound.cancel(true);
+        sensorDetector.stop();
     }
 
 

@@ -14,12 +14,14 @@ public class SensorDetector {
     // TODO: 12/9/2022 callback to MainActivity to update the visible of the miner
     long timeStamp = 0;
     public interface CallBack_MinerView {
-        void hideMinerView();
+        void moveMinerBySensor(int index);
     }
-    private CallBack_MinerView callBack_steps;
+    private CallBack_MinerView callBack_minerView;
     public SensorDetector(Context context,CallBack_MinerView callBack_minerView,GameManager gameManager) {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        this.callBack_minerView = callBack_minerView;
+        this.gameManager=gameManager;
     }
 
 
@@ -54,15 +56,22 @@ public class SensorDetector {
     };
 
     private void calculateStep(float x, float y) {
-        if (x > 6.0) {
+        if (x > 3.0) {//left
             if (System.currentTimeMillis() - timeStamp > 500) {
                 timeStamp = System.currentTimeMillis();
+                callBack_minerView.moveMinerBySensor(-1);
+
+
+
             }
         }
-        if (x < -6.0) {
+        if (x < -3.0) {//right
             if (System.currentTimeMillis() - timeStamp > 500) {
                 timeStamp = System.currentTimeMillis();
-                
+                callBack_minerView.moveMinerBySensor(1);
+
+
+
             }
         }
 
