@@ -8,7 +8,6 @@ import android.hardware.SensorManager;
 
 public class SensorDetector {
     private Context context;
-    private GameManager gameManager;
     private SensorManager mSensorManager;
     private Sensor sensor;
     // TODO: 12/9/2022 callback to MainActivity to update the visible of the miner
@@ -17,11 +16,10 @@ public class SensorDetector {
         void moveMinerBySensor(int index);
     }
     private CallBack_MinerView callBack_minerView;
-    public SensorDetector(Context context,CallBack_MinerView callBack_minerView,GameManager gameManager) {
+    public SensorDetector(Context context,CallBack_MinerView callBack_minerView) {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         this.callBack_minerView = callBack_minerView;
-        this.gameManager=gameManager;
     }
 
 

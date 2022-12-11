@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -28,28 +27,41 @@ public class MainActivity extends AppCompatActivity {
     private ShapeableImageView[] game_IMG_hearts;
     private ShapeableImageView[][] game_IMG_rocksMatrix;
     private ExtendedFloatingActionButton[] game_BTN_arrows;
-    private ShapeableImageView[] game_IMG_motorbikes;
+    private ShapeableImageView[] game_IMG_miner;
     private MaterialTextView main_TXT_addScore;
     GameManager gameManager;
     private Timer timer;
     private int time = 0;
-    private final int DELAY = 600;
-    private AppCompatImageView road_IMG_background;
+    private int delay = 700;
+    private  AppCompatImageView road_IMG_background;
     String[] typeImage= new String[]{"ic_rock","gold"};
     CoinSound coinSound;
     RockSound rockSound;
     SensorDetector sensorDetector;
+    public static final String KEY_SENSOR = "KEY_SENSOR";
+    public static final String KEY_DELAY = "KEY_DELAY";
+    public boolean isSensorOn = false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        Glide.with(MainActivity.this).load(R.drawable.goldminebackground).into(road_IMG_background);
+        Glide.with(this).load(R.drawable.goldminebackground).into(road_IMG_background);
+
+        /*
+        get previous information to delay and playing with sensor(yes/no)
+         */
+        Intent previousIntent  = getIntent();
+        boolean isFasterMode = previousIntent.getExtras().getBoolean(KEY_DELAY);
+        isSensorOn= previousIntent.getExtras().getBoolean(KEY_SENSOR);
         gameManager = new GameManager(game_IMG_hearts.length,this);
-        sensorDetector = new SensorDetector(this,callBack_steps,gameManager);
+        sensorDetector = new SensorDetector(this,callBack_steps);
         initViews();
         setButton();
-        startGame();
+        setDelay(isFasterMode);
 
         game_BTN_arrows[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,21 +73,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setDelay(boolean isFasterMode) {
+        if(isFasterMode)
+            delay = 350;
+        else
+            delay = 600;
+
+    }
+
     private SensorDetector.CallBack_MinerView callBack_steps = new SensorDetector.CallBack_MinerView() {
         @Override
         public void moveMinerBySensor(int index){
-            game_IMG_motorbikes[gameManager.getCurrentIndexCar()].setVisibility(View.INVISIBLE);
+            game_IMG_miner[gameManager.getCurrentIndexCar()].setVisibility(View.INVISIBLE);
             gameManager.moveIndexCar(index);
-            game_IMG_motorbikes[gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);
+            game_IMG_miner[gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);
         }
     };
 
     private void setButton() {
-        // TODO: 12/10/2022 need boolean from menu that check if the sensor is on and do 75-77 lines
-        game_BTN_arrows[0].hide();
-        game_BTN_arrows[1].hide();
-        sensorDetector.start();
-
+        if(isSensorOn) {
+            game_BTN_arrows[0].hide();
+            game_BTN_arrows[1].hide();
+            sensorDetector.start();
+        }
+        else{
+            game_BTN_arrows[0].show();
+            game_BTN_arrows[1].show();
+        }
     }
 
 
@@ -86,17 +110,16 @@ public class MainActivity extends AppCompatActivity {
         findRocks();
         findMotorbikes();
         findArrows();
-        game_BTN_arrows[0].hide();
-        game_BTN_arrows[1].hide();
     }
 
 
     private void initViews() {
         setHeartVisible();
         setRocksInvisible();
-        setMotorbikesVisible();
-
+        setMinerVisible();
     }
+
+
     private void startGame() {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -111,15 +134,15 @@ public class MainActivity extends AppCompatActivity {
 
                 });
             }
-        },0,DELAY);
+        },0,delay);
     }
 
-    private void setMotorbikesVisible() {
-        for (int i = 0; i < game_IMG_motorbikes.length; i++) {
+    private void setMinerVisible() {
+        for (int i = 0; i < game_IMG_miner.length; i++) {
             if(i != gameManager.getCurrentIndexCar())
-                game_IMG_motorbikes[i].setVisibility(View.INVISIBLE);//all the bikes except the middle
+                game_IMG_miner[i].setVisibility(View.INVISIBLE);//all the bikes except the middle
         }
-        game_IMG_motorbikes[ gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);//middle bike visible
+        game_IMG_miner[ gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);//middle bike visible
     }
 
     private void setRocksInvisible() {
@@ -132,11 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setHeartVisible() {
-       // for (int i = 0; i < gameManager.getCurrentIndexCar(); i++) {
         for (int i = 0; i < game_IMG_hearts.length; i++) {
-
             game_IMG_hearts[i].setVisibility(View.VISIBLE);
-
         }
 
     }
@@ -161,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void findMotorbikes() {
 
-        game_IMG_motorbikes = new ShapeableImageView[]{
+        game_IMG_miner = new ShapeableImageView[]{
                 findViewById(R.id.main_IMG_leftMiner),
                 findViewById(R.id.main_IMG_leftMidMiner),
                 findViewById(R.id.main_IMG_middleMiner),
@@ -240,16 +260,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //coinSound = new CoinSound(this);
-        sensorDetector.start();
+        if(isSensorOn)
+            sensorDetector.start();
+
+        startGame();
     }
+
+
 
     @Override
     protected void onPause() {
         super.onPause();
-        coinSound.cancel(true);
-        sensorDetector.stop();
+//        coinSound.cancel(true);
+//        if(isSensorOn)
+//            sensorDetector.stop();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timer.cancel();
+//        coinSound.cancel(true);
+        if(isSensorOn)
+            sensorDetector.stop();
+    }
 
 
     private void checkType(int row,int col,int type) {
@@ -315,8 +349,8 @@ public class MainActivity extends AppCompatActivity {
     private void clicked(int index) {//moving motorbike left/right
         int currentIndex = gameManager.getCurrentIndexCar();
         int moveLeftRight = gameManager.moveIndexCar(index);
-        game_IMG_motorbikes[currentIndex].setVisibility(View.INVISIBLE);
-        game_IMG_motorbikes[moveLeftRight].setVisibility(View.VISIBLE);
+        game_IMG_miner[currentIndex].setVisibility(View.INVISIBLE);
+        game_IMG_miner[moveLeftRight].setVisibility(View.VISIBLE);
     }
 
 

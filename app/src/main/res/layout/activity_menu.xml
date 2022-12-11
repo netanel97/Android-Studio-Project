@@ -3,6 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/road"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="#09B626"/>
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu_BTN_playgame"
         android:layout_width="150dp"
@@ -18,7 +27,7 @@
         android:layout_below="@+id/menu_BTN_playgame"
         android:layout_centerHorizontal="true"/>
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/menu_SW_sound"
+        android:id="@+id/menu_SW_faster"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -36,7 +45,7 @@
         android:shadowColor="#A2C3C7"
         android:text="Sensor"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/menu_SW_sound"
+        android:layout_below="@id/menu_SW_faster"
         android:textSize="20sp" />
 
 
