@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void setButton() {
-        // TODO: 12/10/2022 need boolean from menu that check if the sensor is on and do 75-77 lines 
+        // TODO: 12/10/2022 need boolean from menu that check if the sensor is on and do 75-77 lines
         game_BTN_arrows[0].hide();
         game_BTN_arrows[1].hide();
         sensorDetector.start();
