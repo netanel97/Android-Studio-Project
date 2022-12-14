@@ -4,17 +4,11 @@ import static com.example.hw1_netanelhabas.GameManager.ROCKS_COL;
 import static com.example.hw1_netanelhabas.GameManager.ROCK_ROWS;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
-
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
+import com.example.hw1_netanelhabas.utils.MySignal;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -40,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
     SensorDetector sensorDetector;
     public static final String KEY_SENSOR = "KEY_SENSOR";
     public static final String KEY_DELAY = "KEY_DELAY";
+    public static final String KEY_NAME = "KEY_NAME";
     public boolean isSensorOn = false;
+    private String name = "";
+    private MyDB myDB;
 
 
 
@@ -57,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Intent previousIntent  = getIntent();
         boolean isFasterMode = previousIntent.getExtras().getBoolean(KEY_DELAY);
         isSensorOn= previousIntent.getExtras().getBoolean(KEY_SENSOR);
-        gameManager = new GameManager(game_IMG_hearts.length,this);
+        name = previousIntent.getExtras().getString(KEY_NAME);
+        gameManager = new GameManager(game_IMG_hearts.length,this,name);
         sensorDetector = new SensorDetector(this,callBack_steps);
         initViews();
         setButton();
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             for (int j = ROCKS_COL - 1; j >= 0; j--) {//need to check if its >=
                 if (i == ROCK_ROWS - 1 && game_IMG_rocksMatrix[i][j].getVisibility() == View.VISIBLE && j == gameManager.getCurrentIndexCar()) {
                     //checking last row
-                    checkType(i,j,gameManager.getMain_type_matrix(i,j));//check the type
+                    checkType(gameManager.getMain_type_matrix(i,j));//check the type
 
                 }
 
@@ -286,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void checkType(int row,int col,int type) {
+    private void checkType(int type) {
 
         if(type == 0) {//0 -->Rock
             removeHealth();
@@ -300,49 +298,44 @@ public class MainActivity extends AppCompatActivity {
             coinSound = new CoinSound(this);
             coinSound.execute();
         }
-        vibrate();
+        MySignal.getInstance().vibrate();
     }
 
     private void removeHealth() {
         gameManager.addWrong();
         if(gameManager.getWrong() == game_IMG_hearts.length) {
             gameOver();
-            toast("Game Over restart the game.");
-            vibrate();
-            return;
         }
 
-        vibrate();
+        MySignal.getInstance().vibrate();
         for (int i = 0; i < gameManager.getWrong(); i++) {
             game_IMG_hearts[i].setVisibility(View.INVISIBLE);
         }
-        toast("you have " + (game_IMG_hearts.length-gameManager.getWrong()) + " lives");
-    }
-
-    private void vibrate() {
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 400 milliseconds
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            //deprecated in API 26
-            v.vibrate(400);
-        }
-
+        MySignal.getInstance().toast("you have " + (game_IMG_hearts.length-gameManager.getWrong()) + " lives");
 
     }
+
+
 
     private void gameOver() {
-        setHeartVisible();
-        gameManager.restartGame(game_IMG_hearts.length);
+        saveRecord();
+        changeActivity();
+//        setHeartVisible();
+//        gameManager.restartGame(game_IMG_hearts.length);
 //        timer.cancel();
 //        finish();
 
 
     }
 
-    private void toast(String text) {
-        Toast.makeText(this,text,Toast.LENGTH_SHORT).show();
+    private void changeActivity() {
+
+        Intent intent = new Intent(MainActivity.this,ScoreMapActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void saveRecord() {
+        gameManager.save();
     }
 
 

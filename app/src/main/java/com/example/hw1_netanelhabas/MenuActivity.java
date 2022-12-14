@@ -2,10 +2,12 @@ package com.example.hw1_netanelhabas;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +22,7 @@ public class MenuActivity extends AppCompatActivity {
     private AppCompatImageView road;
     private boolean isSensorOn = false;//play without/with sensor
     private boolean isFasterOn = false;//play faster mode
+    private AppCompatEditText menu_TXT_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +43,33 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         menu_BTN_playgame.setOnClickListener(V-> {//switching to ActivityGame page
-            Intent intent = new Intent(this , MainActivity.class);
-            intent.putExtra(MainActivity.KEY_SENSOR,isSensorOn);
-            intent.putExtra(MainActivity.KEY_DELAY,isFasterOn);
-            startActivity(intent);
-            finish();
+            if(menu_TXT_name.getText().length() != 0) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra(MainActivity.KEY_SENSOR, isSensorOn);
+                intent.putExtra(MainActivity.KEY_NAME,menu_TXT_name.getText().toString());
+                intent.putExtra(MainActivity.KEY_DELAY, isFasterOn);
+                startActivity(intent);
+                finish();
+            }
+            else{
+
+            }
+        });
+
+        menu_BTN_top10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MenuActivity.this , ScoreMapActivity.class);
+                startActivity(intent);
+            }
         });
 
     }
 
     private void findViews() {
         road = findViewById(R.id.road);
+        menu_TXT_name = findViewById(R.id.menu_TXT_name);
         menu_SW_sensor = findViewById(R.id.menu_SW_sensor);
         menu_SW_faster = findViewById(R.id.menu_SW_faster);
         menu_BTN_playgame = findViewById(R.id.menu_BTN_playgame);

@@ -3,6 +3,9 @@ package com.example.hw1_netanelhabas;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.hw1_netanelhabas.utils.MySPV;
+import com.google.gson.Gson;
+
 import java.util.Random;
 
 public class GameManager {
@@ -16,13 +19,14 @@ public class GameManager {
     private int currentIndexCar = ROCKS_COL/2;
     private int[][] main_type_matrix;
     private Context context;
-
+    private String name;
     public GameManager() {
     }
 
-    public GameManager(int health,Context context) {
+    public GameManager(int health,Context context,String name) {
         this.life = health;
         this.context = context;
+        this.name = name;
         initMatrixType();
     }
 
@@ -91,6 +95,23 @@ public class GameManager {
         }
         return 0;//return viewType rock
 
+    }
+
+    public void save() {
+        MyDB myDB;
+        String json = MySPV.getInstance().getStrSP("records","");
+        myDB = new Gson().fromJson(json,MyDB.class);
+        if(myDB == null){
+            myDB = new MyDB();
+        }
+        Record rec = createRecord();
+        myDB.getResults().add(rec);
+        Log.d("save records", myDB.getResults().toString());
+        MySPV.getInstance().putString("records",new Gson().toJson(myDB));
+    }
+
+    private Record createRecord() {
+        return new Record().setName(name).setScore(score).setLat(32.3).setLon(33.1);
     }
 }
 

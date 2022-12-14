@@ -48,6 +48,18 @@
         android:layout_below="@id/menu_SW_faster"
         android:textSize="20sp" />
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/menu_TXT_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textStyle="bold"
+        android:gravity="bottom"
+        android:maxLength="17"
+        android:layout_below="@+id/menu_SW_sensor"
+        android:layout_centerInParent="true"
+        android:hint="Enter a name here"/>
+
 
 
 
