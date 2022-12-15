@@ -11,6 +11,7 @@ public class SensorDetector {
     private SensorManager mSensorManager;
     private Sensor sensor;
     long timeStamp = 0;
+    private final int ResponseTime = 300;
     public interface CallBack_MinerView {
         void moveMinerBySensor(int index);
     }
@@ -54,7 +55,7 @@ public class SensorDetector {
 
     private void calculateStep(float x, float y) {
         if (x > 3.0) {//left
-            if (System.currentTimeMillis() - timeStamp > 500) {
+            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
                 timeStamp = System.currentTimeMillis();
                 callBack_minerView.moveMinerBySensor(-1);
 
@@ -63,7 +64,7 @@ public class SensorDetector {
             }
         }
         if (x < -3.0) {//right
-            if (System.currentTimeMillis() - timeStamp > 500) {
+            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
                 timeStamp = System.currentTimeMillis();
                 callBack_minerView.moveMinerBySensor(1);
 
