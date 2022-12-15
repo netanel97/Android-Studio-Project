@@ -1,4 +1,4 @@
-package com.example.hw1_netanelhabas;
+package com.example.hw1_netanelhabas.Sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -10,7 +10,6 @@ public class SensorDetector {
     private Context context;
     private SensorManager mSensorManager;
     private Sensor sensor;
-    // TODO: 12/9/2022 callback to MainActivity to update the visible of the miner
     long timeStamp = 0;
     public interface CallBack_MinerView {
         void moveMinerBySensor(int index);

@@ -49,11 +49,9 @@ public class Record {
 
     @Override
     public String toString() {
-        return "Record{" +
-                "score=" + score +
-                ", name='" + name + '\'' +
-                ", lat=" + lat +
-                ", lon=" + lon +
-                '}';
+        StringBuffer sb = new StringBuffer("Player: ").append(name);
+        sb.append("\nScore:").append(score);
+        return sb.toString();
+
     }
 }

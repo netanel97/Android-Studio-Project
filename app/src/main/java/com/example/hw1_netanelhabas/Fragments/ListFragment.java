@@ -1,4 +1,4 @@
-package com.example.hw1_netanelhabas;
+package com.example.hw1_netanelhabas.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.hw1_netanelhabas.CallBack_List;
+import com.example.hw1_netanelhabas.MyDB;
+import com.example.hw1_netanelhabas.R;
+import com.example.hw1_netanelhabas.Record;
 
 
 public class ListFragment extends Fragment {
@@ -35,10 +39,11 @@ public class ListFragment extends Fragment {
 
     private void initViews() {
         MyDB allrecords = callBack_list.getRecords();
-        ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(getActivity(), android.R.layout.simple_expandable_list_item_1,allrecords.getResults());
-        Log.d("records:", allrecords.getResults().toString());
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if(allrecords != null){
+            ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(getActivity(), android.R.layout.simple_expandable_list_item_1,allrecords.getResults());
+            listView.setAdapter(adapter);
+
+        }
 
     }
 

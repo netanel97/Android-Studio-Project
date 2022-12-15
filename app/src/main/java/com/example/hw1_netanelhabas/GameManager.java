@@ -106,7 +106,6 @@ public class GameManager {
         }
         Record rec = createRecord();
         myDB.getResults().add(rec);
-        Log.d("save records", myDB.getResults().toString());
         MySPV.getInstance().putString("records",new Gson().toJson(myDB));
     }
 

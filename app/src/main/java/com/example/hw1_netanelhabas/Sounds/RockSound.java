@@ -1,8 +1,10 @@
-package com.example.hw1_netanelhabas;
+package com.example.hw1_netanelhabas.Sounds;
 
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+
+import com.example.hw1_netanelhabas.R;
 
 public class RockSound extends AsyncTask<Void, Void, Void> {
     private Context context;

@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".ScoreMapActivity">
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/score_BackGround_Miner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="#09B626"/>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,8 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.2"
-            android:padding="32dp"
-            android:background="#0fffff"/>
+            android:padding="32dp" />
 
         <FrameLayout
             android:id="@+id/panel_LAY_map"
@@ -31,12 +39,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="30dp"
-            android:background="#0000f0">
+            android:layout_marginVertical="30dp">
 
 
             <Button
-                android:id="@+id/record_BTN_exit"
+                android:id="@+id/record_BTN_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Menu"
