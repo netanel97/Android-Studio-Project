@@ -20,8 +20,6 @@ public class GameManager {
     private int[][] main_type_matrix;
     private Context context;
     private String name;
-    public GameManager() {
-    }
 
     public GameManager(int health,Context context,String name) {
         this.life = health;
@@ -97,20 +95,21 @@ public class GameManager {
 
     }
 
-    public void save() {
+    public void save(double lon , double lat) {
         MyDB myDB;
         String json = MySPV.getInstance().getStrSP("records","");
         myDB = new Gson().fromJson(json,MyDB.class);
         if(myDB == null){
             myDB = new MyDB();
         }
-        Record rec = createRecord();
+        Record rec = createRecord(lon,lat);
         myDB.getResults().add(rec);
         MySPV.getInstance().putString("records",new Gson().toJson(myDB));
     }
 
-    private Record createRecord() {
-        return new Record().setName(name).setScore(score).setLat(32.3).setLon(33.1);
+    private Record createRecord(double lon , double lat) {
+
+        return new Record().setName(name).setScore(score).setLat(lat).setLon(lon);
     }
 }
 

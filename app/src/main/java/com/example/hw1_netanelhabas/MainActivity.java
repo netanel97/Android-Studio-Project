@@ -2,6 +2,8 @@ package com.example.hw1_netanelhabas;
 
 import static com.example.hw1_netanelhabas.GameManager.ROCKS_COL;
 import static com.example.hw1_netanelhabas.GameManager.ROCK_ROWS;
+import static com.example.hw1_netanelhabas.MenuActivity.location;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import android.content.Intent;
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_SENSOR = "KEY_SENSOR";
     public static final String KEY_DELAY = "KEY_DELAY";
     public static final String KEY_NAME = "KEY_NAME";
+    public static final String KEY_LON = "KEY_LON";
+    public static final String KEY_LAT = "KEY_LAT";
+    private double lat;
+    private double lon;
     public boolean isSensorOn = false;
     private String name = "";
     private MyDB myDB;
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         boolean isFasterMode = previousIntent.getExtras().getBoolean(KEY_DELAY);
         isSensorOn= previousIntent.getExtras().getBoolean(KEY_SENSOR);
         name = previousIntent.getExtras().getString(KEY_NAME);
+        lon = previousIntent.getExtras().getDouble(KEY_LON);
+        lat = previousIntent.getExtras().getDouble(KEY_LAT);
         gameManager = new GameManager(game_IMG_hearts.length,this,name);
         sensorDetector = new SensorDetector(this,callBack_steps);
         initViews();
@@ -260,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //coinSound = new CoinSound(this);
         if(isSensorOn)
             sensorDetector.start();
 
@@ -272,16 +279,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        coinSound.cancel(true);
-//        if(isSensorOn)
-//            sensorDetector.stop();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         timer.cancel();
-//        coinSound.cancel(true);
         if(isSensorOn)
             sensorDetector.stop();
     }
@@ -307,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
     private void removeHealth() {
         gameManager.addWrong();
         if(gameManager.getWrong() == game_IMG_hearts.length) {
+            timer.cancel();
             gameOver();
         }
 
@@ -323,12 +327,6 @@ public class MainActivity extends AppCompatActivity {
     private void gameOver() {
         saveRecord();
         changeActivity();
-//        setHeartVisible();
-//        gameManager.restartGame(game_IMG_hearts.length);
-//        timer.cancel();
-//        finish();
-
-
     }
 
     private void changeActivity() {
@@ -338,11 +336,11 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
     private void saveRecord() {
-        gameManager.save();
+        gameManager.save(lon,lat);
     }
 
 
-    private void clicked(int index) {//moving motorbike left/right
+    private void clicked(int index) {//moving miner left/right
         int currentIndex = gameManager.getCurrentIndexCar();
         int moveLeftRight = gameManager.moveIndexCar(index);
         game_IMG_miner[currentIndex].setVisibility(View.INVISIBLE);

@@ -1,30 +1,24 @@
 package com.example.hw1_netanelhabas;
 
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 
 import com.bumptech.glide.Glide;
 import com.example.hw1_netanelhabas.utils.MySignal;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import im.delight.android.location.SimpleLocation;
 
 public class MenuActivity extends AppCompatActivity {
     private SwitchMaterial menu_SW_sensor;
@@ -35,18 +29,20 @@ public class MenuActivity extends AppCompatActivity {
     private boolean isSensorOn = false;//play without/with sensor
     private boolean isFasterOn = false;//play faster mode
     private AppCompatEditText menu_TXT_name;
-    private double lat;
-    private double lon;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+    private double lat = 0.0;
+    private double lon = 0.0;
+    public static SimpleLocation location;//todo static class?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        location = new SimpleLocation(this);
         findViews();
         Glide.with(this).load(R.drawable.goldminebackground).into(road);
 
-        requestLocationPermission();
+        requestLocationPermission(location);
+
+
         menu_SW_sensor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean sensorOn) {
@@ -60,16 +56,17 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        menu_BTN_playgame.setOnClickListener(V-> {//switching to ActivityGame page
-            if(menu_TXT_name.getText().length() != 0) {
+        menu_BTN_playgame.setOnClickListener(V -> {//switching to ActivityGame page
+            if (menu_TXT_name.getText().length() != 0) {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra(MainActivity.KEY_SENSOR, isSensorOn);
-                intent.putExtra(MainActivity.KEY_NAME,menu_TXT_name.getText().toString());
+                intent.putExtra(MainActivity.KEY_NAME, menu_TXT_name.getText().toString());
                 intent.putExtra(MainActivity.KEY_DELAY, isFasterOn);
+                intent.putExtra(MainActivity.KEY_LON,lon);
+                intent.putExtra(MainActivity.KEY_LAT,lat);
                 startActivity(intent);
                 finish();
-            }
-            else{
+            } else {
                 MySignal.getInstance().toast("You Must Fill Name!!");
             }
         });
@@ -78,38 +75,27 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MenuActivity.this , ScoreMapActivity.class);
+                Intent intent = new Intent(MenuActivity.this, ScoreMapActivity.class);
                 startActivity(intent);
             }
         });
 
     }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//    }
 
-    private void requestLocationPermission() {
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-
-            }
-        };
-        if(ContextCompat.checkSelfPermission(MenuActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void requestLocationPermission(SimpleLocation location) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+
         }
-        else{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+        else{//if he doesn't agree he will put 0.0 in lon,lat
+            location.beginUpdates();
+            this.lat = location.getLatitude();
+            this.lon = location.getLongitude();
+            System.out.println("lat + lon " + lat + " " + lon);
         }
 
-        System.out.println("lon + lat"+ lat + " " + lon);
+
 
 
     }
