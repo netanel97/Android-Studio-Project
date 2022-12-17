@@ -1,8 +1,9 @@
 package com.example.hw1_netanelhabas;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.example.hw1_netanelhabas.DB.MyDB;
+import com.example.hw1_netanelhabas.DB.Record;
 import com.example.hw1_netanelhabas.utils.MySPV;
 import com.google.gson.Gson;
 

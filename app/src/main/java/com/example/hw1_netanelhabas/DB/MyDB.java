@@ -1,4 +1,4 @@
-package com.example.hw1_netanelhabas;
+package com.example.hw1_netanelhabas.DB;
 
 import java.util.ArrayList;
 

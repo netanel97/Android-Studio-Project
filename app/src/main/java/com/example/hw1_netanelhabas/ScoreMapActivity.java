@@ -11,8 +11,7 @@ import android.widget.Button;
 import com.bumptech.glide.Glide;
 import com.example.hw1_netanelhabas.Fragments.ListFragment;
 import com.example.hw1_netanelhabas.Fragments.MapFragment;
-import com.example.hw1_netanelhabas.utils.MySPV;
-import com.google.gson.Gson;
+import com.example.hw1_netanelhabas.Interfaces.CallBack_List;
 
 
 public class ScoreMapActivity extends AppCompatActivity {
@@ -20,10 +19,11 @@ public class ScoreMapActivity extends AppCompatActivity {
    private Button record_BTN_menu;
    private MapFragment mapFragment;
    private AppCompatImageView score_BackGround_Miner;
-    CallBack_List callBack_list = new CallBack_List() {
+   CallBack_List callBack_list = new CallBack_List() {
+
        @Override
-       public MyDB getRecords() {
-           return new Gson().fromJson(MySPV.getInstance().getStrSP("records",""),MyDB.class);
+       public void setMapLocation(double lat, double lon, String namePlayer) {
+           mapFragment.setMapLocation(lat, lon,namePlayer);
        }
    };
     @Override
@@ -35,7 +35,6 @@ public class ScoreMapActivity extends AppCompatActivity {
         listFragment = new ListFragment();
         mapFragment = new MapFragment();
         listFragment.setCallBack_list(callBack_list);
-
         getSupportFragmentManager().beginTransaction().add(R.id.panel_LAY_list,listFragment).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.panel_LAY_map,mapFragment).commit();
         record_BTN_menu.setOnClickListener(new View.OnClickListener() {

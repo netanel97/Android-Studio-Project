@@ -2,7 +2,6 @@ package com.example.hw1_netanelhabas;
 
 import static com.example.hw1_netanelhabas.GameManager.ROCKS_COL;
 import static com.example.hw1_netanelhabas.GameManager.ROCK_ROWS;
-import static com.example.hw1_netanelhabas.MenuActivity.location;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.bumptech.glide.Glide;
+import com.example.hw1_netanelhabas.DB.MyDB;
 import com.example.hw1_netanelhabas.Sensors.SensorDetector;
 import com.example.hw1_netanelhabas.Sounds.CoinSound;
 import com.example.hw1_netanelhabas.Sounds.RockSound;
