@@ -25,6 +25,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBy37LcaXw9TPdBhrMAmqyc0qJDVwFtD3g">
         </meta-data>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name=".MenuActivity"
             android:exported="true"

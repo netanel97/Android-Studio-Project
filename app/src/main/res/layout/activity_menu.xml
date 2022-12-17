@@ -11,27 +11,44 @@
         android:scaleType="centerCrop"
         android:background="#09B626"/>
 
+    <TextView
+        android:id="@+id/menu_TXT_GameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/anton"
+        android:text="Gold
+         Sweeper"
+        android:textColor="#E10A0A0A"
+        android:textAlignment="center"
+        android:textSize="70sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu_BTN_playgame"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Play game"
-        android:layout_marginTop="150dp"
+        android:fontFamily="@font/anton"
+        android:textSize="20sp"
+        android:layout_below="@+id/menu_TXT_GameName"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"/>
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu_BTN_top10"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Top 10"
+        android:fontFamily="@font/anton"
+        android:textSize="20sp"
         android:layout_below="@+id/menu_BTN_playgame"
         android:layout_centerHorizontal="true"/>
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/menu_SW_faster"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Fast mode"
+        android:text="Fast Mode"
+        android:fontFamily="@font/anton"
         android:shadowColor="#A2C3C7"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
@@ -39,11 +56,13 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/menu_SW_sensor"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:shadowColor="#A2C3C7"
-        android:text="Sensor"
+        android:text="Sensor Mode"
+        android:fontFamily="@font/anton"
+
         android:layout_centerHorizontal="true"
         android:layout_below="@id/menu_SW_faster"
         android:textSize="20sp" />
@@ -52,13 +71,14 @@
         android:id="@+id/menu_TXT_name"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textStyle="bold"
-        android:gravity="bottom"
-        android:maxLength="17"
         android:layout_below="@+id/menu_SW_sensor"
         android:layout_centerInParent="true"
-        android:hint="Enter a name here"/>
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom"
+        android:hint="Enter your name"
+        android:maxLength="17"
+        android:maxLines="1"
+        android:textStyle="bold" />
 
 
 

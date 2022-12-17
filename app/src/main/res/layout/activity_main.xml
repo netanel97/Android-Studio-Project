@@ -63,17 +63,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Score:"
+                    android:fontFamily="@font/anton"
                     android:textStyle="bold"
                     android:textSize="30sp"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_marginTop="23dp"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/main_TXT_addScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeMaxTextSize="100sp"
+                    android:fontFamily="@font/anton"
                     android:text="000"
                     android:textStyle="bold"
                     android:textSize="30sp"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_marginTop="23dp"/>
 
             </LinearLayout>
         <LinearLayout
