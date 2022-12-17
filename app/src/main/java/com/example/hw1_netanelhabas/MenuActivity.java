@@ -86,21 +86,18 @@ public class MenuActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-
+            putLatLon(location);
         }
-        else{//if he doesn't agree he will put 0.0 in lon,lat
-            location.beginUpdates();
-            this.lat = location.getLatitude();
-            this.lon = location.getLongitude();
-            System.out.println("lat + lon " + lat + " " + lon);
+        else{
+            putLatLon(location);
         }
-
-
-
-
     }
 
-
+    private void putLatLon(SimpleLocation location){
+        location.beginUpdates();
+        this.lat = location.getLatitude();
+        this.lon = location.getLongitude();
+    }
 
     private void findViews() {
         road = findViewById(R.id.road);

@@ -50,7 +50,7 @@ public class Record {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer("Player: ").append(name);
-        sb.append("\nScore:").append(score);
+        sb.append("\nScore:").append(score).append(lon);
         return sb.toString();
 
     }
