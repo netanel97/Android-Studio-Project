@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     GameManager gameManager;
     private Timer timer;
     private int time = 0;
-    private int delay = 700;
+    private int delay = 600;
+    private int fast_delay = 100;
+    private int slow_delay = 600;
     private  AppCompatImageView road_IMG_background;
     String[] typeImage= new String[]{"ic_rock","gold"};
     CoinSound coinSound;
@@ -84,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDelay(boolean isFasterMode) {
         if(isFasterMode)
-            delay = 350;
+            delay = fast_delay;
         else
-            delay = 600;
+            delay = slow_delay;
 
     }
 
@@ -96,6 +98,17 @@ public class MainActivity extends AppCompatActivity {
             game_IMG_miner[gameManager.getCurrentIndexCar()].setVisibility(View.INVISIBLE);
             gameManager.moveIndexCar(index);
             game_IMG_miner[gameManager.getCurrentIndexCar()].setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void changeSpeedBySensor(int speed) {
+            if(speed == 0){
+                delay = slow_delay;
+            }
+            else{
+                delay = fast_delay;
+            }
+
         }
     };
 

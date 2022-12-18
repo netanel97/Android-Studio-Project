@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class SensorDetector {
     private Context context;
@@ -14,6 +15,7 @@ public class SensorDetector {
     private final int ResponseTime = 300;
     public interface CallBack_MinerView {
         void moveMinerBySensor(int index);
+        void changeSpeedBySensor(int speed);
     }
     private CallBack_MinerView callBack_minerView;
     public SensorDetector(Context context,CallBack_MinerView callBack_minerView) {
@@ -54,6 +56,7 @@ public class SensorDetector {
     };
 
     private void calculateStep(float x, float y) {
+        System.out.println("this is y " + y);
         if (x > 3.0) {//left
             if (System.currentTimeMillis() - timeStamp > ResponseTime) {
                 timeStamp = System.currentTimeMillis();
@@ -73,11 +76,17 @@ public class SensorDetector {
             }
         }
 
-//        if (y > 6.0) {
-//            if (System.currentTimeMillis() - timeStamp > 500) {
-//                timeStamp = System.currentTimeMillis();
-//
-//            }
-//        }
+        if (y > 6.0) {
+            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
+                timeStamp = System.currentTimeMillis();//slow
+                callBack_minerView.changeSpeedBySensor(0);
+            }
+        }
+        if (y < 1) {
+            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
+                timeStamp = System.currentTimeMillis();//fast
+                callBack_minerView.changeSpeedBySensor(1);
+            }
+        }
     }
 }
