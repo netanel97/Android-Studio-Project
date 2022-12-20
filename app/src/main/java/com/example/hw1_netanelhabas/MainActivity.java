@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private int time = 0;
     private int delay = 600;
-    private int fast_delay = 100;
+    private int fast_delay = 300;
     private int slow_delay = 600;
     private  AppCompatImageView road_IMG_background;
     String[] typeImage= new String[]{"ic_rock","gold"};
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private double lon;
     public boolean isSensorOn = false;
     private String name = "";
-    private MyDB myDB;
 
 
 
@@ -102,13 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void changeSpeedBySensor(int speed) {
-            if(speed == 0){
-                delay = slow_delay;
-            }
-            else{
-                delay = fast_delay;
-            }
-
+                delay = speed;
         }
     };
 
@@ -116,9 +109,10 @@ public class MainActivity extends AppCompatActivity {
         if(isSensorOn) {
             game_BTN_arrows[0].hide();
             game_BTN_arrows[1].hide();
-            sensorDetector.start();
+            sensorDetector.startX();
         }
         else{
+
             game_BTN_arrows[0].show();
             game_BTN_arrows[1].show();
         }
@@ -281,25 +275,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(isSensorOn)
-            sensorDetector.start();
-
+        if(isSensorOn) {
+            sensorDetector.startX();
+          //  sensorDetector.startY();
+        }
         startGame();
     }
-
-
 
     @Override
     protected void onPause() {
         super.onPause();
+        timer.cancel();
+        if(isSensorOn) {
+            sensorDetector.stopX();
+//            sensorDetector.stopY();
+        }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         timer.cancel();
-        if(isSensorOn)
-            sensorDetector.stop();
+        if(isSensorOn) {
+            sensorDetector.stopX();
+//            sensorDetector.stopY();
+
+        }
+
     }
 
 

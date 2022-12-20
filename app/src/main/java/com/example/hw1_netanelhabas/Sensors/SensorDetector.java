@@ -29,24 +29,42 @@ public class SensorDetector {
     /**
      * register to the sensors
      */
-    public void start() {
-        mSensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    public void startX() {
+        mSensorManager.registerListener(sensorEventListenerX, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
+//     public void startY() {
+//            mSensorManager.registerListener(sensorEventListenerY, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+//        }
 
     /**
      * unregister to the sensors
      */
-    public void stop() {
-        mSensorManager.unregisterListener(sensorEventListener);
+    public void stopX() {
+        mSensorManager.unregisterListener(sensorEventListenerX);
     }
+//    public void stopY() {
+//        mSensorManager.unregisterListener(sensorEventListenerY);
+//    }
 
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
+
+//    private SensorEventListener sensorEventListenerY = new SensorEventListener() {
+//        @Override
+//        public void onSensorChanged(SensorEvent event) {
+//            float y = event.values[1];
+//                calculateStepY(y);
+//        }
+//
+//        @Override
+//        public void onAccuracyChanged(Sensor sensor, int i) {
+//
+//        }
+//    };
+
+    private SensorEventListener sensorEventListenerX = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float x = event.values[0];
-            float y = event.values[1];
-
-            calculateStep(x, y);
+            calculateStepX(x);
         }
 
         @Override
@@ -55,8 +73,8 @@ public class SensorDetector {
         }
     };
 
-    private void calculateStep(float x, float y) {
-        System.out.println("this is y " + y);
+    private void calculateStepX(float x) {
+
         if (x > 3.0) {//left
             if (System.currentTimeMillis() - timeStamp > ResponseTime) {
                 timeStamp = System.currentTimeMillis();
@@ -75,18 +93,22 @@ public class SensorDetector {
 
             }
         }
-
-        if (y > 6.0) {
-            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
-                timeStamp = System.currentTimeMillis();//slow
-                callBack_minerView.changeSpeedBySensor(0);
-            }
-        }
-        if (y < 1) {
-            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
-                timeStamp = System.currentTimeMillis();//fast
-                callBack_minerView.changeSpeedBySensor(1);
-            }
-        }
     }
+
+//    private void calculateStepY(float y){
+//        if (y < 0.0) {
+//            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
+//                timeStamp = System.currentTimeMillis();//SLOW
+//                callBack_minerView.changeSpeedBySensor(600);
+//            }
+//            Log.e("pttt", "" + y);
+//        }
+//        if (y > 9.0) {
+//            if (System.currentTimeMillis() - timeStamp > ResponseTime) {
+//                timeStamp = System.currentTimeMillis();//FAST
+//                callBack_minerView.changeSpeedBySensor(200);
+//            }
+//            Log.e("pttt", "" + y);
+//        }
+//    }
 }

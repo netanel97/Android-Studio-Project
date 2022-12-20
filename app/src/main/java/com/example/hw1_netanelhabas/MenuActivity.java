@@ -31,6 +31,7 @@ public class MenuActivity extends AppCompatActivity {
     private AppCompatEditText menu_TXT_name;
     private double lat = 0.0;
     private double lon = 0.0;
+    private int flag = 0;
     public static SimpleLocation location;//todo static class?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class MenuActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.goldminebackground).into(road);
 
         requestLocationPermission(location);
-
 
         menu_SW_sensor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -86,11 +86,9 @@ public class MenuActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-            putLatLon(location);
+
         }
-        else{
-            putLatLon(location);
-        }
+        putLatLon(location);
     }
 
     private void putLatLon(SimpleLocation location){
