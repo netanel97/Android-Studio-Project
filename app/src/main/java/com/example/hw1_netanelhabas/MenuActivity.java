@@ -31,7 +31,7 @@ public class MenuActivity extends AppCompatActivity {
     private AppCompatEditText menu_TXT_name;
     private double lat = 0.0;
     private double lon = 0.0;
-    public SimpleLocation location;
+    public SimpleLocation location;//todo static class?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

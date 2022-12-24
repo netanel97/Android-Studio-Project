@@ -25,6 +25,7 @@ public class ListFragment extends Fragment {
     private ListView listView;
     private CallBack_List callBack_list;
     private MyDB allRecords;
+    private final String RECORD = "records";
 
 
     public void setCallBack_list(CallBack_List callBack_list){
@@ -49,9 +50,8 @@ public class ListFragment extends Fragment {
         });
         return view;
     }
-
     private void initViews() {
-        allRecords = new Gson().fromJson(MySPV.getInstance().getStrSP("records",""),MyDB.class);
+        allRecords = new Gson().fromJson(MySPV.getInstance().getStrSP(RECORD,""),MyDB.class);
         if(allRecords != null){
             ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(getActivity(), android.R.layout.simple_expandable_list_item_1,allRecords.getResults());
             listView.setAdapter(adapter);

@@ -51,8 +51,6 @@ public class Record {
     public String toString() {
         StringBuffer sb = new StringBuffer("Player: ").append(name);
         sb.append("\nScore:").append(score);
-//        sb.append("\nLongitude:").append(lon).append("\nLatitude").append(lat);
-
         return sb.toString();
 
     }
