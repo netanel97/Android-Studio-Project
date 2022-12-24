@@ -12,7 +12,6 @@ import java.util.Random;
 public class GameManager {
     private int wrong;
     private int score = 0;
-    private int life; //not sure about this
     public static final int ROCK_ROWS = 5;
     public static final int ROCKS_COL = 5;
     private final int TOP_RIGHT = ROCKS_COL - 1;
@@ -23,7 +22,6 @@ public class GameManager {
     private String name;
     private final String RECORD = "records";
     public GameManager(int health,Context context,String name) {
-        this.life = health;
         this.context = context;
         this.name = name;
         initMatrixType();
@@ -71,11 +69,6 @@ public class GameManager {
 
     public int getWrong() {
         return wrong;
-    }
-
-    public void restartGame(int health) {
-        this.wrong = 0;
-        this.life = health;
     }
 
     public void addWrong() {
